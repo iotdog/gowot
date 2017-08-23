@@ -18,11 +18,8 @@ func NewResponseWriter(w http.ResponseWriter) *ResponseWriter {
 }
 
 func LoggerMiddleware(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	start := time.Now()
-
 	rw := NewResponseWriter(w)
-	next(rw, r)
-
+	start := time.Now()
 	logging := fmt.Sprintf("%s -- %v %s %s %s %s - %s %v",
 		r.RemoteAddr,
 		start,
@@ -34,4 +31,6 @@ func LoggerMiddleware(w http.ResponseWriter, r *http.Request, next http.HandlerF
 		time.Since(start))
 
 	holmes.Infoln(logging)
+
+	next(rw, r)
 }
